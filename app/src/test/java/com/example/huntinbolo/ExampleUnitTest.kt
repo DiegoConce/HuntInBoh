@@ -1,4 +1,4 @@
-package com.example.caclient
+package com.example.huntinbolo
 
 import org.junit.Test
 

@@ -1,9 +1,8 @@
-package com.example.caclient.ui
+package com.example.huntinbolo.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.caclient.R
-import com.example.caclient.databinding.ActivityMainBinding
+import com.example.huntinbolo.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
