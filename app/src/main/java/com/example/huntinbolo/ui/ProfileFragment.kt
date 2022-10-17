@@ -10,11 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.huntinbolo.databinding.FragmentProfileBinding
+import com.example.huntinbolo.model.User
 import com.example.huntinbolo.repository.ApiInterface
 import com.example.huntinbolo.utils.RetrofitClient
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class ProfileFragment : Fragment() {
@@ -29,38 +32,12 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        getUser()
+
+        //viewModel get users
+        // set observable
+
         return binding.root
     }
 
-    private fun getUser() {
-        val retrofit = RetrofitClient.getInstance()
-        val apiInterface = retrofit.create(ApiInterface::class.java)
-
-        lifecycleScope.launchWhenCreated {
-            try {
-                val response = apiInterface.getUser()
-
-                Log.v("TEST", response.body().toString())
-
-                if (response.isSuccessful) {
-                    val json = Gson().toJson(response.body())
-
-
-                    Glide.with(requireActivity())
-                        .load("https://top-mmo.fr/wp-content/uploads/2022/07/8af85-16569274154588-1920.jpg")
-                        .into(binding.imageViewTest)
-                }else {
-                    Toast.makeText(
-                        requireContext(),
-                        response.errorBody().toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            } catch (Ex: Exception) {
-                Log.e("ERROR", Ex.localizedMessage)
-            }
-        }
-    }
 
 }
