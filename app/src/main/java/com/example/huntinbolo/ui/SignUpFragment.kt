@@ -13,6 +13,7 @@ import com.example.huntinbolo.databinding.FragmentSignupBinding
 import com.example.huntinbolo.model.User
 import com.example.huntinbolo.repository.UserRepository
 import com.example.huntinbolo.ui.viewmodel.UserViewModel
+import com.example.huntinbolo.utils.StatusCode
 
 class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
@@ -33,8 +34,6 @@ class SignUpFragment : Fragment() {
         binding.signupButton.setOnClickListener {
             // findNavController().navigate(R.id.action_signUpFragment_to_bottomNavFragment)
 
-
-            //  UserRepository.registerUser(userTest)
 
             viewModel.performRegisterUser(
                 binding.signupEmail.text.toString().trim(),

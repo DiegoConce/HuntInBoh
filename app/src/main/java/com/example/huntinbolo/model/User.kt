@@ -7,4 +7,5 @@ data class User(
     var username: String,
     var bio: String?,
     var password: String,
+    var token: String
 )

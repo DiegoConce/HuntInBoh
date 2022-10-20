@@ -2,13 +2,15 @@ package com.example.huntinbolo.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.huntinbolo.model.User
 import com.example.huntinbolo.repository.UserRepository
 
 class UserViewModel : ViewModel() {
 
     // val userList = MutableLiveData<ArrayList<>>
 
-    var signUpResposne = MutableLiveData<String>()
+    var signUpResponse = MutableLiveData<Int>()
+    var userToken = MutableLiveData<String>()
 
     fun performRegisterUser(
         email: String,
@@ -22,6 +24,6 @@ class UserViewModel : ViewModel() {
         map["bio"] = bio
         map["password"] = password
 
-        UserRepository.registerUser(map)
+        UserRepository.registerUser(map, userToken)
     }
 }
