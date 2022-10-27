@@ -7,17 +7,19 @@ import retrofit2.http.*
 interface ApiInterface {
 
     @GET("/user")
-    fun getUsers(): Call<List<User>>
+    fun getUsers(@Header("x-access-token") token: String): Call<Any>
 
     @POST("/user")
     fun registerUser(@Body user: HashMap<String, String>): Call<User>
 
-    @DELETE("/user(id)")
-    fun deleteUser(): Call<Any> //id
+    @DELETE("/user/{username}")//serve token
+    fun deleteUser(@Path("username") username: String): Call<Any>
 
     @POST("/login")
-    fun loginUser() : Call<Any> //mail pass
-
+    fun loginUser(
+        @Header("x-access-token") token: String,
+        @Body credentials: HashMap<String, String>
+    ): Call<User>
 
 
 }

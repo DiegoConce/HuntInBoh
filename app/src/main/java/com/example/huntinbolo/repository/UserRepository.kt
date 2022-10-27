@@ -1,14 +1,14 @@
 package com.example.huntinbolo.repository
 
-import android.util.Log
+import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import com.example.huntinbolo.model.User
+import com.example.huntinbolo.utils.PreferenceHelper
 import com.example.huntinbolo.utils.RetrofitClient
 import com.example.huntinbolo.utils.StatusCode
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.net.ssl.SSLEngineResult
 
 class UserRepository {
 
@@ -16,47 +16,115 @@ class UserRepository {
         private val retrofit = RetrofitClient.getInstance()
         private val apiInterface = retrofit.create(ApiInterface::class.java)
 
-        fun getUser() {
-
-            apiInterface.getUsers().enqueue(object : Callback<List<User>> {
-                override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                    if (response.body() != null) {
-                        //binding.profileBio.text = response.body().toString()
+        fun getUser(token: String, resMsg: MutableLiveData<String>) {
+            apiInterface.getUsers(token).enqueue(object : Callback<Any> {
+                override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                    when (response.code()) {
+                        StatusCode.OK.code -> {
+                            resMsg.value = response.message()
+                        }
+                        StatusCode.InternalServerError.code -> {
+                            resMsg.value = ""
+                        }
                     }
                 }
 
-                override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                    // TODO("Not yet implemented")
-                }
+                override fun onFailure(call: Call<Any>, t: Throwable) {
 
+                }
             })
         }
 
-        fun registerUser(map: HashMap<String, String>, userToken: MutableLiveData<String>) {
-
+        fun registerUser(map: HashMap<String, String>, resMsg: MutableLiveData<String>) {
             apiInterface.registerUser(map).enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
-                    //TODO("Not yet implemented")
-                    Log.v("TEST", "PORCODI: " + response.code() + "\n" + response.body().toString())
 
-                    val string = response.body().toString()
+                    when (response.code()) {
+                        StatusCode.Created.code -> {
+                            var bio = ""
+                            if (response.body()?.bio != null) {
+                                bio = response.body()!!.bio!!
+                            }
 
-                    if (response.code() == StatusCode.Created.code) {
-                        //converti con gson
-                        userToken.value = response.body()?.token
-                    } else if (response.code() == StatusCode.Conflict.code) {
-                        //nn saprei
+                            PreferenceHelper.loadUser(
+                                response.body()!!.username,
+                                bio,
+                                response.body()!!.email,
+                                response.body()!!.token
+                            )
+                            resMsg.value = response.message()
+                        }
+
+                        StatusCode.Conflict.code -> {
+                            resMsg.value = response.message()
+                        }
+
+                        StatusCode.InternalServerError.code -> {
+                            resMsg.value = response.message()
+                        }
                     }
-
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
-                    // TODO("Not yet implemented")
+                    resMsg.value = "Errore server, riprovare"
                 }
 
             })
         }
 
+        fun deleteUser(username: String) {
+            apiInterface.deleteUser(username).enqueue(object : Callback<Any> {
+                override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                    when (response.code()) {
+                        StatusCode.OK.code -> {
+
+                        }
+                        StatusCode.BadRequest.code -> {
+
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Any>, t: Throwable) {
+                    //   TODO("Not yet implemented")
+                }
+            })
+        }
+
+        fun loginUser(
+            token: String,
+            credentials: HashMap<String, String>,
+            resMsg: MutableLiveData<String>
+        ) {
+            apiInterface.loginUser(token, credentials).enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    when (response.code()) {
+                        StatusCode.OK.code -> {
+                            var bio = ""
+                            if (response.body()?.bio != null) {
+                                bio = response.body()!!.bio!!
+                            }
+
+                            PreferenceHelper.loadUser(
+                                response.body()!!.username,
+                                bio,
+                                response.body()!!.email,
+                                response.body()!!.token
+                            )
+                            resMsg.value = response.message()
+                        }
+                        StatusCode.BadRequest.code -> {
+                            resMsg.value = response.message()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    resMsg.value = "Errore server, riprovare"
+                }
+
+            })
+        }
 
     }
 

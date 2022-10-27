@@ -6,5 +6,6 @@ enum class StatusCode(val code: Int) {
     BadRequest(400),
     NotFound(404),
     Conflict(409),
+    InternalServerError(500),
     ServiceUnavailable(503)
 }
