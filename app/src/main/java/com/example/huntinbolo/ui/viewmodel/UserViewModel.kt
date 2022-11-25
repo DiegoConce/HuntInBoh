@@ -3,6 +3,7 @@ package com.example.huntinbolo.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.huntinbolo.repository.UserRepository
+import com.example.huntinbolo.repository.UserRepository.Companion.sha256
 
 class UserViewModel : ViewModel() {
 
@@ -18,7 +19,7 @@ class UserViewModel : ViewModel() {
         map["email"] = email
         map["username"] = username
         map["bio"] = bio
-        map["password"] = password
+        map["password"] = password.sha256()
 
         UserRepository.registerUser(map, resMsg)
     }
@@ -26,13 +27,13 @@ class UserViewModel : ViewModel() {
     fun performLogin(token: String, email: String, password: String) {
         val map = HashMap<String, String>()
         map["email"] = email
-        map["password"] = password
+        map["password"] = password.sha256()
 
         UserRepository.loginUser(token, map, resMsg)
     }
 
-    fun deleteUser(username: String) {
-        UserRepository.deleteUser(username)
+    fun deleteUser(id: String) {
+        UserRepository.deleteUser(id)
     }
 
     fun getUsers(token: String) {

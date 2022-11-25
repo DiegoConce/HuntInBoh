@@ -49,9 +49,12 @@ class ProfileFragment : Fragment() {
                 .setTitle(getString(R.string.attenzione))
                 .setMessage("Stai per eliminare per sempre il tuo accout, sei sicuro?")
                 .setPositiveButton("Si") { _, _ ->
-
-                    // viewModel.deleteUser(sharedPref.getString(PreferenceHelper.USER_NAME,"")!!)
-
+                   // viewModel.deleteUser(sharedPref.getString(PreferenceHelper.USER_ID, "")!!)
+                    viewModel.deleteUser("49")
+                    requireActivity().finish()
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                 }
                 .setNegativeButton("No", null)
                 .show()

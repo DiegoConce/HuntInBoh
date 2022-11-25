@@ -1,6 +1,5 @@
 package com.example.huntinbolo.repository
 
-import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import com.example.huntinbolo.model.User
 import com.example.huntinbolo.utils.PreferenceHelper
@@ -9,6 +8,7 @@ import com.example.huntinbolo.utils.StatusCode
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.MessageDigest
 
 class UserRepository {
 
@@ -72,9 +72,11 @@ class UserRepository {
             })
         }
 
-        fun deleteUser(username: String) {
-            apiInterface.deleteUser(username).enqueue(object : Callback<Any> {
+        fun deleteUser(id: String) {
+            apiInterface.deleteUser(id).enqueue(object : Callback<Any> {
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                    var a = id
+
                     when (response.code()) {
                         StatusCode.OK.code -> {
 
@@ -124,6 +126,21 @@ class UserRepository {
                 }
 
             })
+        }
+
+        fun String.sha256(): String {
+            return hashString(this, "SHA-256")
+        }
+
+        fun String.md5(): String {
+            return hashString(this, "MD5")
+        }
+
+        private fun hashString(input: String, algorithm: String): String {
+            return MessageDigest
+                .getInstance(algorithm)
+                .digest(input.toByteArray())
+                .fold("") { str, it -> str + "%02x".format(it) }
         }
 
     }

@@ -2,6 +2,7 @@ package com.example.huntinbolo.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,18 +13,30 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import com.example.huntinbolo.R
 import com.example.huntinbolo.databinding.FragmentMapBinding
+import com.example.huntinbolo.model.Poi
+import com.example.huntinbolo.ui.viewmodel.PoiViewModel
+import com.example.huntinbolo.utils.PreferenceHelper
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.data.geojson.GeoJsonLayer
+import org.json.JSONObject
 
 class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
     private lateinit var map: GoogleMap
+    private lateinit var sharedPref: SharedPreferences
+
+    private val viewModel: PoiViewModel by activityViewModels()
+
 
     private val bologna = LatLng(44.4949, 11.3426)
 
@@ -35,7 +48,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     // Permission is granted
                 } else {
                     // Permission is denied
-                    Toast.makeText(requireContext(),"Dacci i permessi, nabbo",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Dacci i permessi, nabbo", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         }
@@ -46,12 +60,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapBinding.inflate(inflater, container, false)
+        sharedPref = PreferenceHelper.getSharedPreferences(requireContext())
 
         val mapFragment = SupportMapFragment.newInstance()
         mapFragment.getMapAsync(this)
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.map_frame_layout, mapFragment)
             .commit()
+
+        viewModel.getPoi(sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!)
 
         return binding.root
     }
@@ -64,13 +81,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         showMyPosition()
 
-
-
-
+        viewModel.poiList.observe(viewLifecycleOwner) {
+            loadMarkers(it)
+        }
 
         binding.mapFabBtn.setOnClickListener {
-
-            //map.animateCamera(CameraUpdateFactory.zoomIn())
             map.animateCamera(CameraUpdateFactory.zoomTo(10F), 2000, null)
             map.moveCamera(CameraUpdateFactory.newLatLng(bologna))
 
@@ -82,10 +97,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 .build()
 
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-
-            //Camera
         }
-
     }
 
     private fun showMyPosition() {
@@ -113,6 +125,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
                 )
             }
+        }
+    }
+
+    @SuppressLint("PotentialBehaviorOverride")
+    private fun loadMarkers(list: ArrayList<Poi>) {
+        map.clear()
+        for (item in list) {
+            map.addMarker(
+                MarkerOptions()
+                    .position(LatLng(item.lat.toDouble(), item.long.toDouble()))
+                    .title(item.id.toString())
+            )
+        }
+
+        map.setOnMarkerClickListener {
+            for (item in list) {
+                if (item.id == it.title!!.toInt()) {
+                    viewModel.selectedPoi.value = item
+                }
+            }
+
+            PoiBottomSheet().show(parentFragmentManager, PoiBottomSheet.TAG)
+            true
         }
     }
 

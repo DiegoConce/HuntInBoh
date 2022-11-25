@@ -1,5 +1,6 @@
 package com.example.huntinbolo.utils
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,10 +21,13 @@ object RetrofitClient {
             .addInterceptor(mHttpLoggingInterceptor)
             .build()
 
+        val gson = GsonBuilder()
+            .enableComplexMapKeySerialization()
+            .create()
 
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(baseURL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(mOkHttpClient)
             .build()
 

@@ -54,12 +54,17 @@ class LoginFragment : Fragment() {
         viewModel.resMsg.observe(viewLifecycleOwner) {
             if (it == "OK") {
                 findNavController().navigate(R.id.action_loginFragment_to_bottomNavFragment)
+            } else if (it != "") {
+                binding.loginChipError.visibility = View.VISIBLE
+                binding.loginChipError.text = it
+            } else {
+                binding.loginChipError.visibility = View.GONE
             }
         }
     }
 
     private fun checkIfLogged() {
         viewModel.resMsg.value = ""
-        viewModel.getUsers(sharedPref.getString(PreferenceHelper.USER_TOKEN,"")!!)
+        viewModel.getUsers(sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!)
     }
 }

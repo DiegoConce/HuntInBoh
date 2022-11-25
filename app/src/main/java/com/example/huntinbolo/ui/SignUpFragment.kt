@@ -44,7 +44,7 @@ class SignUpFragment : Fragment() {
         viewModel.resMsg.observe(viewLifecycleOwner) {
             if (it == "Created") {
                 findNavController().navigate(R.id.action_signUpFragment_to_bottomNavFragment)
-            } else if (viewModel.resMsg.value != "") {
+            } else if (it != "") {
                 binding.signupScrollView.fullScroll(ScrollView.FOCUS_UP)
                 binding.signupErrorChip.visibility = View.VISIBLE
                 binding.signupErrorChip.text = it
