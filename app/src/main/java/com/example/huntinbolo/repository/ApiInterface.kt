@@ -13,11 +13,26 @@ interface ApiInterface {
     @GET("/poi")
     fun getPois(@Header("x-access-token") token: String): Call<List<Poi>>
 
+    @GET("/poi/{category}")
+    fun getPoiCategory(
+        @Header("x-access-token") token: String,
+        @Path("category") category: Int
+    ): Call<List<Poi>>
+
+    @POST("/poi/findOptimal")
+    fun getOptimalPoi(
+        @Header("x-access-token") token: String,
+        @Body info: HashMap<String, Any>
+    ): Call<Poi>
+
     @POST("/user")
     fun registerUser(@Body user: HashMap<String, String>): Call<User>
 
     @DELETE("/user/{id}")
     fun deleteUser(@Path("id") id: String): Call<Any>
+
+    @GET("user/{id}")
+    fun getUserById(@Header("x-access-token") token: String, @Path("id") id: String): Call<User>
 
     @POST("/login")
     fun loginUser(

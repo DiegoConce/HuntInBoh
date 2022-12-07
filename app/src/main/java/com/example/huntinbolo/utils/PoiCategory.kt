@@ -1,10 +1,10 @@
 package com.example.huntinbolo.utils
 
 enum class PoiCategory(val code: Int) {
-    Fontanella(0),
-    Panchine(1),
-    Bagni(2),
-    Parchi(3),
-    Cestini(4),
-    DAE(5)
+    Fontanella(1),
+    Panchine(2),
+    Bagni(3),
+    Parchi(4),
+    Cestini(5),
+    DAE(6)
 }

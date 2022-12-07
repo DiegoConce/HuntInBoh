@@ -20,7 +20,6 @@ class PoiRepository {
                     when (response.code()) {
                         StatusCode.OK.code -> {
                             list.value = response.body()!!.toCollection(ArrayList())
-                            val a = 3
                         }
                     }
                 }
@@ -31,6 +30,47 @@ class PoiRepository {
 
             }
             )
+        }
+
+        fun getPoiCategory(token: String, category: Int, list: MutableLiveData<ArrayList<Poi>>) {
+            apiInterface.getPoiCategory(token, category).enqueue(object : Callback<List<Poi>> {
+                override fun onResponse(call: Call<List<Poi>>, response: Response<List<Poi>>) {
+                    when (response.code()) {
+                        StatusCode.OK.code -> {
+                            list.value = response.body()!!.toCollection(ArrayList())
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Poi>>, t: Throwable) {
+                    // TODO("Not yet implemented")
+                }
+            })
+        }
+
+        fun getOptimalPoi(
+            token: String,
+            info: HashMap<String, Any>,
+            list: MutableLiveData<ArrayList<Poi>>
+        ) {
+            apiInterface.getOptimalPoi(token, info).enqueue(object : Callback<Poi> {
+                override fun onResponse(call: Call<Poi>, response: Response<Poi>) {
+                    when (response.code()) {
+                        StatusCode.OK.code -> {
+                            val list2 = ArrayList<Poi>()
+                            list2.add(response.body()!!)
+                            list.value = list2
+                            val a = list.value
+                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<Poi>, t: Throwable) {
+                    // TODO("Not yet implemented")
+                }
+
+            })
         }
     }
 

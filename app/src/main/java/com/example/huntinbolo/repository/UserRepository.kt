@@ -35,6 +35,23 @@ class UserRepository {
             })
         }
 
+        fun getUserById(id: String, token: String, user: MutableLiveData<User>) {
+            apiInterface.getUserById(token, id).enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    when (response.code()) {
+                        StatusCode.OK.code -> {
+                            user.value = response.body()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                 //   TODO("Not yet implemented")
+                }
+
+            })
+        }
+
         fun registerUser(map: HashMap<String, String>, resMsg: MutableLiveData<String>) {
             apiInterface.registerUser(map).enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {

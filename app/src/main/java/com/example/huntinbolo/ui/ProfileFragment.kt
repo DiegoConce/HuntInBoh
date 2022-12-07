@@ -27,20 +27,21 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         sharedPref = PreferenceHelper.getSharedPreferences(requireContext())
 
-        //viewModel get users
-        // set observable
-        setView()
+        setInfo()
         setListeners()
         return binding.root
     }
 
 
-    private fun setView() {
-
+    private fun setInfo() {
         binding.profileUsername.text = sharedPref.getString(PreferenceHelper.USER_NAME, "")!!
-        binding.profileBio.text = sharedPref.getString(PreferenceHelper.USER_BIO, "")!!
         binding.profileEmail.text = sharedPref.getString(PreferenceHelper.USER_EMAIL, "")!!
-        binding.profileToken.text = sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!
+
+        if (sharedPref.getString(PreferenceHelper.USER_BIO, "")!!.isEmpty()) {
+            binding.profileBio.text = "Nessuna descrizione inserita"
+        } else {
+            binding.profileBio.text = sharedPref.getString(PreferenceHelper.USER_BIO, "")!!
+        }
     }
 
     private fun setListeners() {
@@ -49,8 +50,7 @@ class ProfileFragment : Fragment() {
                 .setTitle(getString(R.string.attenzione))
                 .setMessage("Stai per eliminare per sempre il tuo accout, sei sicuro?")
                 .setPositiveButton("Si") { _, _ ->
-                   // viewModel.deleteUser(sharedPref.getString(PreferenceHelper.USER_ID, "")!!)
-                    viewModel.deleteUser("49")
+                    viewModel.deleteUser(sharedPref.getString(PreferenceHelper.USER_ID, "")!!)
                     requireActivity().finish()
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -58,10 +58,8 @@ class ProfileFragment : Fragment() {
                 }
                 .setNegativeButton("No", null)
                 .show()
-            //requireActivity().finish()
         }
 
-        //chjeck locgged
 
         binding.profileLogoutBtn.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
