@@ -20,6 +20,7 @@ import com.example.huntinbolo.model.Poi
 import com.example.huntinbolo.ui.viewmodel.PoiViewModel
 import com.example.huntinbolo.utils.PoiCategory
 import com.example.huntinbolo.utils.PreferenceHelper
+import com.example.huntinbolo.utils.PrivacyLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -140,12 +141,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             showMyPosition()
         }
 
+
+        val test = LatLng(2.0, 2.0)
+
         binding.nearbyButton.setOnClickListener {
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 viewModel.getOptimalPoi(
                     sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
-                    it.latitude.toString(),
-                    it.longitude.toString(),
+                    PrivacyLocation.dummpyUpdate(it.latitude, it.longitude),
                     selectedCategory,
                     rankValue
                 )

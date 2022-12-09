@@ -6,6 +6,7 @@ import com.example.huntinbolo.model.Poi
 import com.example.huntinbolo.model.User
 import com.example.huntinbolo.repository.PoiRepository
 import com.example.huntinbolo.repository.UserRepository
+import com.google.android.gms.maps.model.LatLng
 
 class PoiViewModel : ViewModel() {
     var poiList = MutableLiveData<ArrayList<Poi>>()
@@ -22,12 +23,12 @@ class PoiViewModel : ViewModel() {
         PoiRepository.getPoiCategory(token, category, poiList)
     }
 
-    fun getOptimalPoi(token: String, lat: String, long: String, category: Int, rank: Int) {
+    fun getOptimalPoi(token: String, latLng: LatLng, category: Int, rank: Int) {
         poiList.value?.clear()
 
         val map = HashMap<String, Any>()
-        map["lat"] = lat
-        map["long"] = long
+        map["lat"] = latLng.latitude.toString()
+        map["long"] = latLng.longitude.toString()
         map["category"] = category
         map["rank"] = rank
 
