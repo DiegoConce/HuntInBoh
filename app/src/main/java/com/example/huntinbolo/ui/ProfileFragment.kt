@@ -3,6 +3,8 @@ package com.example.huntinbolo.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +44,7 @@ class ProfileFragment : Fragment() {
         } else {
             binding.profileBio.text = sharedPref.getString(PreferenceHelper.USER_BIO, "")!!
         }
+
     }
 
     private fun setListeners() {
@@ -75,6 +78,68 @@ class ProfileFragment : Fragment() {
                 .setNegativeButton("No", null)
                 .show()
         }
+        binding.dummyUpdateNum.filters = arrayOf(MinMaxFilter(1, 5))
+        binding.gpsPerturbNum.filters = arrayOf(MinMaxFilter(1, 8))
+        viewModel.numberDummyUpdate.value = binding.dummyUpdateNum.text.toString().toInt()
+        viewModel.numberGpsPerturb.value = binding.gpsPerturbNum.text.toString().toInt()
+
+        binding.noPrivacySwitch.setOnClickListener {
+            viewModel.noPrivacy.value = true
+            viewModel.gpsPerturbation.value = false
+            viewModel.dummyUpdate.value = false
+            binding.dummyUpdateSwitch.isChecked = false
+            binding.gpsPerturbSwitch.isChecked = false
+        }
+
+        binding.dummyUpdateSwitch.setOnClickListener {
+            viewModel.dummyUpdate.value = true
+            viewModel.noPrivacy.value = false
+            viewModel.gpsPerturbation.value = false
+            binding.noPrivacySwitch.isChecked = false
+            binding.gpsPerturbSwitch.isChecked = false
+        }
+
+        binding.gpsPerturbSwitch.setOnClickListener {
+            viewModel.gpsPerturbation.value = true
+            viewModel.noPrivacy.value = false
+            viewModel.dummyUpdate.value = false
+            binding.noPrivacySwitch.isChecked = false
+            binding.dummyUpdateSwitch.isChecked = false
+        }
+    }
+
+    inner class MinMaxFilter() : InputFilter {
+        private var intMin: Int = 1
+        private var intMax: Int = 1
+
+        constructor(minValue: Int, maxValue: Int) : this() {
+            this.intMin = minValue
+            this.intMax = maxValue
+        }
+
+        override fun filter(
+            source: CharSequence?,
+            start: Int,
+            end: Int,
+            dest: Spanned?,
+            dstart: Int,
+            dend: Int
+        ): CharSequence? {
+            try {
+                val input = Integer.parseInt(dest.toString() + source.toString())
+                if (isInRange(intMin, intMax, input)) {
+                    return null
+                }
+            } catch (e: java.lang.NumberFormatException) {
+                e.printStackTrace()
+            }
+            return ""
+        }
+
+        private fun isInRange(a: Int, b: Int, c: Int): Boolean {
+            return if (b > a) c in a..b else c in b..a
+        }
+
     }
 
 }

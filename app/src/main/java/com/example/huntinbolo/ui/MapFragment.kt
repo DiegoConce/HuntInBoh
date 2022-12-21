@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.example.huntinbolo.R
 import com.example.huntinbolo.databinding.FragmentMapBinding
 import com.example.huntinbolo.model.Poi
 import com.example.huntinbolo.ui.viewmodel.PoiViewModel
+import com.example.huntinbolo.ui.viewmodel.UserViewModel
 import com.example.huntinbolo.utils.PoiCategory
 import com.example.huntinbolo.utils.PreferenceHelper
 import com.example.huntinbolo.utils.PrivacyLocation
@@ -37,6 +39,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: PoiViewModel by activityViewModels()
+    private val userVM: UserViewModel by activityViewModels()
     private var rankValue = 1
     private var selectedCategory = 1
 
@@ -98,7 +101,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
 
-                //Permessi Concessi
+                // Permessi Concessi
                 map.isMyLocationEnabled = true
                 map.uiSettings.isCompassEnabled = false
                 map.uiSettings.isMyLocationButtonEnabled = false
@@ -110,7 +113,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
 
             else -> {
-                //Richiedo i permessi attraverso il prompt
+                // Richiedo i permessi attraverso il prompt
                 requestPermissions.launch(
                     arrayOf(
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -141,17 +144,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             showMyPosition()
         }
 
-
-        val test = LatLng(2.0, 2.0)
-
         binding.nearbyButton.setOnClickListener {
             fusedLocationClient.lastLocation.addOnSuccessListener {
-                viewModel.getOptimalPoi(
-                    sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
-                    PrivacyLocation.dummpyUpdate(it.latitude, it.longitude),
-                    selectedCategory,
-                    rankValue
-                )
+                sendLocation(it)
             }
         }
 
@@ -207,6 +202,43 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             rankValue = slider.value.toInt()
             Log.v("TEST", "rankvalue --- > " + rankValue)
         }
+    }
+
+    private fun sendLocation(location: Location) {
+
+        if (userVM.noPrivacy.value == true) {
+            viewModel.getOptimalPoi(
+                sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
+                LatLng(location.latitude, location.longitude),
+                selectedCategory,
+                rankValue
+            )
+        }
+
+        if (userVM.dummyUpdate.value == true) {
+            val a  = 3 // todo
+        }
+
+        if (userVM.gpsPerturbation.value == true) {
+            viewModel.getOptimalPoi(
+                sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
+                PrivacyLocation.gpsPerturbation(
+                    location.latitude,
+                    location.longitude,
+                    userVM.numberGpsPerturb.value!!.toInt()
+                ),
+                selectedCategory,
+                rankValue
+            )
+        }
+
+        viewModel.getOptimalPoi(
+            sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
+            PrivacyLocation.dummpyUpdate(location.latitude, location.longitude, 3),
+            selectedCategory,
+            rankValue
+        )
+
     }
 
     @SuppressLint("PotentialBehaviorOverride")

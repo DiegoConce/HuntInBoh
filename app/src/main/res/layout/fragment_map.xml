@@ -104,6 +104,7 @@
         android:elevation="1dp"
         android:stepSize="1"
         android:value="1"
+        android:valueFrom="1"
         android:valueTo="10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -8,6 +8,11 @@ import com.example.huntinbolo.repository.UserRepository.Companion.sha256
 class UserViewModel : ViewModel() {
 
     var resMsg = MutableLiveData<String>()
+    var noPrivacy = MutableLiveData(true)
+    var dummyUpdate = MutableLiveData(false)
+    var gpsPerturbation = MutableLiveData(false)
+    var numberDummyUpdate = MutableLiveData(10)
+    var numberGpsPerturb = MutableLiveData(5)
 
     fun performRegisterUser(
         email: String,
