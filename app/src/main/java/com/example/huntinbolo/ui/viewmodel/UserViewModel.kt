@@ -11,8 +11,9 @@ class UserViewModel : ViewModel() {
     var noPrivacy = MutableLiveData(true)
     var dummyUpdate = MutableLiveData(false)
     var gpsPerturbation = MutableLiveData(false)
-    var numberDummyUpdate = MutableLiveData(10)
-    var numberGpsPerturb = MutableLiveData(5)
+    var trustedServer = MutableLiveData(false)
+    var numberDummyUpdate = MutableLiveData(1)
+    var numberGpsPerturb = MutableLiveData(1)
 
     fun performRegisterUser(
         email: String,

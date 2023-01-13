@@ -32,6 +32,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
 class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
@@ -72,7 +74,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .replace(R.id.map_frame_layout, mapFragment)
             .commit()
 
-        viewModel.getPoi(sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!)
+        //viewModel.getPoi(sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!)
 
         return binding.root
     }
@@ -216,7 +218,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
         if (userVM.dummyUpdate.value == true) {
-            val a  = 3 // todo
+            val x = userVM.numberDummyUpdate.value!!
+            for (i in 1..x) { //n
+                Log.v("DUMMY","Numero di dummy ---> $x")
+                Log.v("DUMMY", "Indice ---> $i")
+                Log.v("DUMMY","Dummy lat originale --->${location.latitude}")
+                Log.v("DUMMY","Dummy lon originale --->${location.longitude}")
+
+                viewModel.getOptimalPoi(
+                    sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
+                    PrivacyLocation.dummpyUpdate(location.latitude, location.longitude),
+                    selectedCategory,
+                    rankValue
+                )
+            }
+
+
+            viewModel.poiList.observe(viewLifecycleOwner) {
+                if (it.size == x) {
+                    val e = it[Random.nextInt(it.size)]
+                    it.clear()
+                    it.add(e)
+                    loadMarkers(it)
+                }
+            }
         }
 
         if (userVM.gpsPerturbation.value == true) {
@@ -231,13 +256,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 rankValue
             )
         }
-
-        viewModel.getOptimalPoi(
-            sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
-            PrivacyLocation.dummpyUpdate(location.latitude, location.longitude, 3),
-            selectedCategory,
-            rankValue
-        )
 
     }
 

@@ -40,6 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Descrizione"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/poi_name"
         app:layout_constraintTop_toBottomOf="@+id/poi_name" />
 

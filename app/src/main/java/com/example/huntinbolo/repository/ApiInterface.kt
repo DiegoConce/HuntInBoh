@@ -25,6 +25,13 @@ interface ApiInterface {
         @Body info: HashMap<String, Any>
     ): Call<Poi>
 
+    @POST
+    fun getOptimalPoiTrusted(
+        @Url url: String,
+        @Header("x-access-token") token: String,
+        @Body info: HashMap<String, Any>
+    ): Call<Poi>
+
     @POST("/user")
     fun registerUser(@Body user: HashMap<String, String>): Call<User>
 

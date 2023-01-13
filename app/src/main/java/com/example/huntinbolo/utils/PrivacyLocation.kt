@@ -1,37 +1,43 @@
 package com.example.huntinbolo.utils
 
+import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import kotlin.random.Random
 
 class PrivacyLocation {
     companion object {
 
-        fun dummpyUpdate(lat: Double, lon: Double, n: Int): LatLng {
-            val updates = 10
-            val positions = ArrayList<LatLng>()
+        fun dummpyUpdate(lat: Double, lon: Double): LatLng {
+
             val perturbation = 0.005
 
-            for (i in 1..updates) {
-                val newLat = lat - perturbation + Math.random() * (2 * perturbation)
-                val newLong = lon - perturbation + Math.random() * (2 * perturbation)
-                positions.add(LatLng(newLat, newLong))
-            }
+            val newLat = lat - perturbation + Math.random() * (2 * perturbation)
+            val newLon = lon - perturbation + Math.random() * (2 * perturbation)
 
-            return LatLng(lat, lon)
+            Log.v("DUMMY", "Dummy New Lat ---> $newLat")
+            Log.v("DUMMY", "Dummy New Lon ---> $newLon")
+
+            return LatLng(newLat, newLon)
         }
 
 
-        // massimo 8 cifre da riv
         fun gpsPerturbation(lat: Double, lon: Double, n: Int): LatLng {
-            var digitRandom = Math.random().toString().slice(2..8)
+            Log.v("TEST", "Numero di cifre gps perturbation ---> $n")
 
-            val newLat = lat.toString().slice(0..2) + digitRandom
+            Log.v("TEST","GPS Perturb Lat ---> $lat")
+            Log.v("TEST", "GPS Perturb Lon ---> $lon")
 
-            digitRandom = Math.random().toString().slice(2..8)
+            var newLat = lat.toString()
+            var newLon = lon.toString()
+            val digitRandom = Math.random().toString().slice(2..5)
 
-            val newLong =lon.toString().slice(0..2) + digitRandom
+            newLat = newLat.slice(0..1) + newLat.slice(2..2 + n) + digitRandom
+            newLon = newLon.slice(0..1)  + newLon.slice(2..2 + n) + digitRandom
 
-            return LatLng(newLat.toDouble(), newLong.toDouble())
+            Log.v("TEST","GPS Perturb newLat ---> $newLat")
+            Log.v("TEST", "GPS Perturb newLon ---> $newLon")
+
+            return LatLng(newLat.toDouble(), newLon.toDouble())
         }
 
 

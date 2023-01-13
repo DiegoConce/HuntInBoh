@@ -65,7 +65,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageViewTest"
+                    android:id="@+id/profile_image"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:scaleType="centerCrop"
@@ -115,10 +115,12 @@
 
             <TextView
                 android:id="@+id/profile_email"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
                 android:text="TextView"
                 android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -137,12 +139,14 @@
 
             <TextView
                 android:id="@+id/profile_bio"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -247,9 +251,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="32dp"
                 android:text="GPS perturbation"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
@@ -258,22 +260,32 @@
                 android:layout_width="50dp"
                 android:layout_height="48dp"
                 android:layout_marginEnd="8dp"
-                android:text="1"
                 android:ems="10"
-                android:textAlignment="center"
                 android:inputType="numberSigned"
+                android:text="1"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/gps_perturb_switch"
                 app:layout_constraintEnd_toStartOf="@+id/gps_perturb_switch"
                 app:layout_constraintTop_toTopOf="@+id/gps_perturb_switch" />
 
             <TextView
                 android:id="@+id/textView14"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Massimo 8"
                 android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="@+id/textView13"
                 app:layout_constraintStart_toStartOf="@+id/textView13"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gps_perturb_switch" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/gps_perturb_switch"
@@ -286,12 +298,34 @@
 
             <TextView
                 android:id="@+id/textView11"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Massimo 5"
                 android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="@+id/textView12"
                 app:layout_constraintStart_toStartOf="@+id/textView12"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:text="Server Trusted"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/trusted_server_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView15" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

@@ -6,7 +6,9 @@ import com.example.huntinbolo.model.Poi
 import com.example.huntinbolo.model.User
 import com.example.huntinbolo.repository.PoiRepository
 import com.example.huntinbolo.repository.UserRepository
+import com.example.huntinbolo.utils.PrivacyLocation
 import com.google.android.gms.maps.model.LatLng
+import kotlin.random.Random
 
 class PoiViewModel : ViewModel() {
     var poiList = MutableLiveData<ArrayList<Poi>>()
@@ -32,7 +34,7 @@ class PoiViewModel : ViewModel() {
         map["category"] = category
         map["rank"] = rank
 
-       PoiRepository.getOptimalPoi(token, map, poiList)
+        PoiRepository.getOptimalPoi(token, map, poiList)
     }
 
     fun getUserById(id: String, token: String) {

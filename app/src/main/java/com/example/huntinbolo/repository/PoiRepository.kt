@@ -51,16 +51,16 @@ class PoiRepository {
         fun getOptimalPoi(
             token: String,
             info: HashMap<String, Any>,
-            list: MutableLiveData<ArrayList<Poi>>
+            list: MutableLiveData<ArrayList<Poi>>,
         ) {
             apiInterface.getOptimalPoi(token, info).enqueue(object : Callback<Poi> {
                 override fun onResponse(call: Call<Poi>, response: Response<Poi>) {
                     when (response.code()) {
                         StatusCode.OK.code -> {
-                            val list2 = ArrayList<Poi>()
-                            list2.add(response.body()!!)
-                            list.value = list2
-                            val a = list.value
+                            val old = list.value.orEmpty()
+                            list.value = ArrayList(old).apply {
+                                add(response.body()!!)
+                            }
                         }
                     }
 
@@ -71,6 +71,26 @@ class PoiRepository {
                 }
 
             })
+        }
+
+        fun getOptimalPoiTrusted(
+            token: String,
+            info: HashMap<String, Any>,
+            list: MutableLiveData<ArrayList<Poi>>
+        ) {
+            val trustedUrl = "https://quiver-oval-tarragon.glitch.me/poi/findOptimal"
+
+            apiInterface.getOptimalPoiTrusted(trustedUrl, token, info)
+                .enqueue(object : Callback<Poi> {
+                    override fun onResponse(call: Call<Poi>, response: Response<Poi>) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onFailure(call: Call<Poi>, t: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
         }
     }
 

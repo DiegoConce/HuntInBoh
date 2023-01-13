@@ -48,7 +48,6 @@ class PoiBottomSheet : BottomSheetDialogFragment() {
             setRecyclerView(it.tags)
         }
 
-
     }
 
     private fun setTitle(category: String, id: Int) {

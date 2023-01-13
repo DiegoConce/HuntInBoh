@@ -3,13 +3,16 @@ package com.example.huntinbolo.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.example.huntinbolo.R
 import com.example.huntinbolo.databinding.FragmentProfileBinding
 import com.example.huntinbolo.ui.viewmodel.UserViewModel
@@ -45,6 +48,11 @@ class ProfileFragment : Fragment() {
             binding.profileBio.text = sharedPref.getString(PreferenceHelper.USER_BIO, "")!!
         }
 
+        Glide.with(requireContext())
+            .load("https://picsum.photos/400")
+            .error(R.drawable.isoka)
+            .into(binding.profileImage)
+
     }
 
     private fun setListeners() {
@@ -78,10 +86,38 @@ class ProfileFragment : Fragment() {
                 .setNegativeButton("No", null)
                 .show()
         }
+
         binding.dummyUpdateNum.filters = arrayOf(MinMaxFilter(1, 5))
         binding.gpsPerturbNum.filters = arrayOf(MinMaxFilter(1, 8))
-        viewModel.numberDummyUpdate.value = binding.dummyUpdateNum.text.toString().toInt()
-        viewModel.numberGpsPerturb.value = binding.gpsPerturbNum.text.toString().toInt()
+
+        binding.dummyUpdateNum.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s.isNullOrEmpty())
+                    viewModel.numberDummyUpdate.value = s.toString().toInt()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+
+        binding.gpsPerturbNum.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s.isNullOrEmpty())
+                    viewModel.numberGpsPerturb.value = s.toString().toInt()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
 
         binding.noPrivacySwitch.setOnClickListener {
             viewModel.noPrivacy.value = true
@@ -105,6 +141,10 @@ class ProfileFragment : Fragment() {
             viewModel.dummyUpdate.value = false
             binding.noPrivacySwitch.isChecked = false
             binding.dummyUpdateSwitch.isChecked = false
+        }
+
+        binding.trustedServerSwitch.setOnClickListener {
+            viewModel.trustedServer.value = true
         }
     }
 
