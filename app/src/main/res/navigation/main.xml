@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.huntinbolo.ui.LoginFragment"
+        android:name="com.example.huntinboh.ui.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.huntinbolo.ui.SignUpFragment"
+        android:name="com.example.huntinboh.ui.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/fragment_signup">
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/bottomNavFragment"
-        android:name="com.example.huntinbolo.ui.BottomNavFragment"
+        android:name="com.example.huntinboh.ui.BottomNavFragment"
         android:label="BottomNavFragment"
         tools:layout="@layout/fragment_bottom_nav" />
 </navigation>
