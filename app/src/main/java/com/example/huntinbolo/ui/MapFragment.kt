@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -89,6 +90,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             loadMarkers(it)
         }
 
+        viewModel.resMsg.observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty())
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+
         showMyPosition()
         setClickListeners()
     }
@@ -151,6 +157,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 sendLocation(it)
             }
         }
+
+        binding.btnInfo.tooltipText = "ssss"
 
         binding.fountainChip.setOnClickListener {
             viewModel.getPoiCategory(
@@ -220,10 +228,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (userVM.dummyUpdate.value == true) {
             val x = userVM.numberDummyUpdate.value!!
             for (i in 1..x) { //n
-                Log.v("DUMMY","Numero di dummy ---> $x")
+                Log.v("DUMMY", "Numero di dummy ---> $x")
                 Log.v("DUMMY", "Indice ---> $i")
-                Log.v("DUMMY","Dummy lat originale --->${location.latitude}")
-                Log.v("DUMMY","Dummy lon originale --->${location.longitude}")
+                Log.v("DUMMY", "Dummy lat originale --->${location.latitude}")
+                Log.v("DUMMY", "Dummy lon originale --->${location.longitude}")
 
                 viewModel.getOptimalPoi(
                     sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
@@ -254,6 +262,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 ),
                 selectedCategory,
                 rankValue
+            )
+        }
+
+        if (userVM.trustedServer.value == true) {
+            userVM.trustedOptions.value!!.msgNo++
+
+            viewModel.getOptimalPoiTrusted(
+                sharedPref.getString(PreferenceHelper.USER_TOKEN, "")!!,
+                LatLng(location.latitude, location.longitude),
+                selectedCategory,
+                rankValue,
+                userVM.trustedOptions.value!!
             )
         }
 

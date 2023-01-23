@@ -2,6 +2,7 @@ package com.example.huntinbolo.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.huntinbolo.model.TrustedOptions
 import com.example.huntinbolo.repository.UserRepository
 import com.example.huntinbolo.repository.UserRepository.Companion.sha256
 
@@ -14,6 +15,7 @@ class UserViewModel : ViewModel() {
     var trustedServer = MutableLiveData(false)
     var numberDummyUpdate = MutableLiveData(1)
     var numberGpsPerturb = MutableLiveData(1)
+    var trustedOptions = MutableLiveData(TrustedOptions())
 
     fun performRegisterUser(
         email: String,
@@ -45,4 +47,33 @@ class UserViewModel : ViewModel() {
     fun getUsers(token: String) {
         UserRepository.getUser(token, resMsg)
     }
+
+    fun setNoPrivacy() {
+        noPrivacy.value = true
+        gpsPerturbation.value = false
+        dummyUpdate.value = false
+        trustedServer.value = false
+    }
+
+    fun setDummyUpdate() {
+        noPrivacy.value  = false
+        gpsPerturbation.value = false
+        dummyUpdate.value = true
+        trustedServer.value = false
+    }
+
+    fun setGpsPerturbation() {
+        noPrivacy.value = false
+        gpsPerturbation.value = true
+        dummyUpdate.value = false
+        trustedServer.value = false
+    }
+
+    fun setTrustedServer() {
+        noPrivacy.value = false
+        gpsPerturbation.value = false
+        dummyUpdate.value = false
+        trustedServer.value = true
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.huntinbolo.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.huntinbolo.model.Poi
+import com.example.huntinbolo.model.TrustedOptions
 import com.example.huntinbolo.model.User
 import com.example.huntinbolo.repository.PoiRepository
 import com.example.huntinbolo.repository.UserRepository
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.random.Random
 
 class PoiViewModel : ViewModel() {
+    var resMsg = MutableLiveData<String>()
     var poiList = MutableLiveData<ArrayList<Poi>>()
     var selectedPoi = MutableLiveData<Poi>()
     var addedByUser = MutableLiveData<User>()
@@ -35,6 +37,30 @@ class PoiViewModel : ViewModel() {
         map["rank"] = rank
 
         PoiRepository.getOptimalPoi(token, map, poiList)
+    }
+
+    fun getOptimalPoiTrusted(
+        token: String,
+        latLng: LatLng,
+        category: Int,
+        rank: Int,
+        trustedOptions: TrustedOptions
+    ) {
+        poiList.value?.clear()
+
+        val map = HashMap<String, Any>()
+        map["lat"] = latLng.latitude.toString()
+        map["long"] = latLng.longitude.toString()
+        map["category"] = category
+        map["msgNo"] = trustedOptions.msgNo
+        map["rank"] = rank
+        map["anonimityLevel"] = trustedOptions.anonimityLevel
+        map["spatialToleranceX"] = trustedOptions.spatialToleranceX
+        map["spatialToleranceY"] = trustedOptions.spatialToleranceY
+        map["temporalTolerance"] = trustedOptions.temporalTolerance
+        map["requestsTolerance"] = trustedOptions.requestsTolerance
+
+        PoiRepository.getOptimalPoiTrusted(token, map, poiList, resMsg)
     }
 
     fun getUserById(id: String, token: String) {
