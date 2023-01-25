@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.ui.setupWithNavController
 import com.example.huntinboh.R
 import com.example.huntinboh.databinding.FragmentBottomNavBinding
+import com.example.huntinboh.utils.setupWithNavController
 
 class BottomNavFragment : Fragment() {
     private lateinit var binding: FragmentBottomNavBinding

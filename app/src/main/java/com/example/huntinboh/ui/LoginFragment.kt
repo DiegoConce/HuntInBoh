@@ -26,7 +26,7 @@ class LoginFragment : Fragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         sharedPref = PreferenceHelper.getSharedPreferences(requireContext())
-        checkIfLogged()
+        // checkIfLogged()
         setListeners()
         setObservableVM()
 

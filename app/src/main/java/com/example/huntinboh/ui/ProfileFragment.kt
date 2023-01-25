@@ -53,6 +53,11 @@ class ProfileFragment : Fragment() {
             .error(R.drawable.isoka)
             .into(binding.profileImage)
 
+        if (viewModel.trustedServer.value == true)
+            showTrustedLayout()
+        else
+            hideTrustedLayout()
+
     }
 
     private fun setListeners() {

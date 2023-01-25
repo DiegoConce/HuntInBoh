@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.huntinboh.ui
+package com.example.huntinboh.utils
 
 import android.content.Intent
 import android.util.SparseArray
