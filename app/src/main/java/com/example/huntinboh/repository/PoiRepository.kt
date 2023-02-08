@@ -80,7 +80,7 @@ class PoiRepository {
             list: MutableLiveData<ArrayList<Poi>>,
             resMsg: MutableLiveData<String>
         ) {
-            val trustedUrl = "https://quiver-oval-tarragon.glitch.me/poi/findOptimal"
+            val trustedUrl = "https://canary-platinum-edam.glitch.me/poi/findOptimal"
 
             apiInterface.getOptimalPoiTrusted(trustedUrl, token, info)
                 .enqueue(object : Callback<Poi> {
